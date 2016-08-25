@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Adquisicion de Datos</string>
+    <string name="mensaje_angulos_respecto_norte">Desviación con respecto al norte</string>
+</resources>
