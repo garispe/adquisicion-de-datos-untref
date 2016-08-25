@@ -48,7 +48,6 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
                 String angulos = angulosRespectoNorte.getText().toString();
 
                 if (!angulos.isEmpty()) {
-
                     angulosRespectoNorteIndicados = Double.parseDouble(angulos);
                     angulosRespectoNorte.setText("");
                 }
