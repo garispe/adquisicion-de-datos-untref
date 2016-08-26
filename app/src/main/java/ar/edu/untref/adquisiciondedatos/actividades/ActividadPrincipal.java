@@ -182,6 +182,7 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
 
         if (requestCode == REQUEST_PERMISSIONS) {
 
+            GPSactivado = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean permisoFineLocationConcedido = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
             boolean permisoCoarseLocationConcedido = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
