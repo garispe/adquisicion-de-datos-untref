@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
  */
 public class Preferencias {
 
-    public static final String PREFERENCES = "add_preferences";
+    public static final String PREFERENCES = "adquisicion_de_datos_prefs";
 
     public static void guardarBoolean(Context context, String key, Boolean value) {
 
