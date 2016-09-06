@@ -21,9 +21,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 
 import ar.edu.untref.adquisiciondedatos.R;
 import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
@@ -121,23 +124,33 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        googleMap.getUiSettings().setZoomGesturesEnabled(true);
-        googleMap.getUiSettings().setAllGesturesEnabled(true);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        }
 
-        googleMap.setPadding(20, 150, 0, 0);
+        String latitud = Preferencias.getString(this, Constantes.LATITUD);
+        String longitud = Preferencias.getString(this, Constantes.LONGITUD);
+        CameraUpdate posicionActual = CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(latitud), Double.valueOf(longitud)));
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(12);
+        googleMap.getUiSettings().setAllGesturesEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.moveCamera(posicionActual);
+        googleMap.animateCamera(zoom);
+        setPosicionBrujula(googleMap);
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+        double latitud = location.getLatitude();
+        double longitud = location.getLongitude();
 
-        Log.w(TAG, "Latitud:" + latitude);
-        Log.w(TAG, "Longitud:" + longitude);
+        Log.d(TAG, "Latitud:" + latitud);
+        Log.d(TAG, "Longitud:" + longitud);
 
-        Preferencias.guardarString(this, Constantes.LATITUD, String.valueOf(latitude));
-        Preferencias.guardarString(this, Constantes.LONGITUD, String.valueOf(longitude));
+        Preferencias.guardarString(this, Constantes.LATITUD, String.valueOf(latitud));
+        Preferencias.guardarString(this, Constantes.LONGITUD, String.valueOf(longitud));
     }
 
     @Override
@@ -193,6 +206,10 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
                 }
             }
         }
+    }
+
+    private void setPosicionBrujula(GoogleMap googleMap){
+        googleMap.setPadding(20, 150, 0, 0);
     }
 
     private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
