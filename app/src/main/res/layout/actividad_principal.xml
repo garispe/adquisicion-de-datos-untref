@@ -15,26 +15,48 @@
         android:id="@+id/layout_indicador_angulos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:visibility="visible">
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_indicador_angulos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:elevation="5dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-            <EditText
-                android:id="@+id/angulos_respecto_norte"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/mensaje_angulos_respecto_norte"
-                android:imeOptions="actionDone"
-                android:inputType="number"
-                android:maxLines="1" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/icono_brujula"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="18dp"
+                    android:src="@drawable/ic_brujula_norte" />
+
+                <EditText
+                    android:id="@+id/angulos_respecto_norte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toLeftOf="@id/icono_brujula"
+                    android:hint="@string/mensaje_angulos_respecto_norte"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:textColorHint="@color/grisClaro" />
+
+            </RelativeLayout>
 
         </android.support.v7.widget.CardView>
 
