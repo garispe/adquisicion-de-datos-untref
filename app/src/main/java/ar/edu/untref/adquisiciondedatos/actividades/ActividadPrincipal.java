@@ -15,10 +15,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -29,6 +29,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import ar.edu.untref.adquisiciondedatos.R;
+import ar.edu.untref.adquisiciondedatos.enums.PuntoCardinal;
+import ar.edu.untref.adquisiciondedatos.modelos.Brujula;
 import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
 import ar.edu.untref.adquisiciondedatos.utilidades.Preferencias;
 import butterknife.Bind;
@@ -44,13 +46,19 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
     private LocationManager locationManager;
     private boolean GPSactivado;
     private MapFragment fragmentoMapa;
-    private double angulosRespectoNorteIndicados = 0;
+    private float angulosRespectoNorteIndicados = 0;
+    private Brujula brujula;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_principal);
         ButterKnife.bind(this);
+
+        brujula = new Brujula(this);
+        brujula.flechas = (ImageView) findViewById(R.id.imagen_flecha);
+        brujula.flechaOrientacion = (ImageView) findViewById(R.id.imagen_orientacion);
+        brujula.iniciar();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         GPSactivado = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -71,6 +79,8 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
     protected void onResume() {
         super.onResume();
 
+        brujula.iniciar();
+
         GPSactivado = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean permisoFineLocationConcedido = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean permisoCoarseLocationConcedido = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -86,8 +96,16 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        brujula.detener();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+
+        brujula.detener();
 
         boolean permisoFineLocationConcedido = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean permisoCoarseLocationConcedido = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -131,13 +149,16 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
 
         String latitud = Preferencias.getString(this, Constantes.LATITUD);
         String longitud = Preferencias.getString(this, Constantes.LONGITUD);
-        CameraUpdate posicionActual = CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(latitud), Double.valueOf(longitud)));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(12);
-        googleMap.getUiSettings().setAllGesturesEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.moveCamera(posicionActual);
-        googleMap.animateCamera(zoom);
-        setPosicionBrujula(googleMap);
+
+        if (latitud != null && longitud != null) {
+            CameraUpdate posicionActual = CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(latitud), Double.valueOf(longitud)));
+            CameraUpdate zoom = CameraUpdateFactory.zoomTo(12);
+            googleMap.getUiSettings().setAllGesturesEnabled(true);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.moveCamera(posicionActual);
+            googleMap.animateCamera(zoom);
+            setPosicionBrujula(googleMap);
+        }
     }
 
     @Override
@@ -145,24 +166,8 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
 
         double latitud = location.getLatitude();
         double longitud = location.getLongitude();
-
-        Log.d(TAG, "Latitud:" + latitud);
-        Log.d(TAG, "Longitud:" + longitud);
-
         Preferencias.guardarString(this, Constantes.LATITUD, String.valueOf(latitud));
         Preferencias.guardarString(this, Constantes.LONGITUD, String.valueOf(longitud));
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
     }
 
     private void mostrarDialogoParaHabilitarGPS() {
@@ -208,7 +213,7 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void setPosicionBrujula(GoogleMap googleMap){
+    private void setPosicionBrujula(GoogleMap googleMap) {
         googleMap.setPadding(20, 150, 0, 0);
     }
 
@@ -221,7 +226,7 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
                 String angulos = angulosRespectoNorte.getText().toString();
 
                 if (!angulos.isEmpty()) {
-                    angulosRespectoNorteIndicados = Double.parseDouble(angulos);
+                    angulosRespectoNorteIndicados = Float.parseFloat(angulos);
                     angulosRespectoNorte.setText("");
                 }
             }
@@ -229,4 +234,49 @@ public class ActividadPrincipal extends AppCompatActivity implements OnMapReadyC
             return false;
         }
     };
+
+//    private PuntoCardinal getDireccion(float azimuth) {
+//
+//
+//        boolean condicionNorte = (azimuth >= 0 && azimuth < 22.5) || (azimuth >= 337.5);
+//        boolean condicionNoreste = (azimuth >= 22.5 && azimuth < 67.5);
+//        boolean condicionEste = (azimuth >= 67.5 && azimuth < 112.5);
+//        boolean condicionSureste = (azimuth >= 112.5 && azimuth < 157.5);
+//        boolean condicionSur = (azimuth >= 157.5 && azimuth < 202.5);
+//        boolean condicionSuroeste = (azimuth >= 202.5 && azimuth < 247.5);
+//        boolean condicionOeste = (azimuth >= 247.5 && azimuth < 292.5);
+//        boolean condicionNoroeste = (azimuth >= 292.5 && azimuth < 337.5);
+//
+//        if (condicionNorte) {
+//            return PuntoCardinal.NORTE;
+//        } else if (condicionNoreste) {
+//            return PuntoCardinal.NORESTE;
+//        } else if (condicionEste) {
+//            return PuntoCardinal.ESTE;
+//        } else if (condicionSureste) {
+//            return PuntoCardinal.SURESTE;
+//        } else if (condicionSur) {
+//            return PuntoCardinal.SUR;
+//        } else if (condicionSuroeste) {
+//            return PuntoCardinal.SUROESTE;
+//        } else if (condicionOeste) {
+//            return PuntoCardinal.OESTE;
+//        } else if (condicionNoroeste) {
+//            return PuntoCardinal.NOROESTE;
+//        }
+//
+//        return PuntoCardinal.NONE;
+//    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
 }

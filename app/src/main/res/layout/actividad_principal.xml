@@ -12,6 +12,37 @@
         android:layout_height="match_parent" />
 
     <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imagen_brujula"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/brujula" />
+
+        <ImageView
+            android:id="@+id/imagen_flecha"
+            android:layout_width="10dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/flechas" />
+
+        <ImageView
+            android:id="@+id/imagen_orientacion"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:tint="@android:color/holo_blue_dark"
+            android:scaleType="fitXY"
+            android:src="@drawable/flecha_orientacion" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/layout_indicador_angulos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
