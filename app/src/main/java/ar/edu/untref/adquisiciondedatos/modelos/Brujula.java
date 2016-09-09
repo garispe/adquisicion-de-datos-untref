@@ -9,11 +9,14 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import ar.edu.untref.adquisiciondedatos.interfaces.OrientacionListener;
+
 public class Brujula implements SensorEventListener {
 
     private static final String TAG = Brujula.class.getSimpleName();
 
     private SensorManager sensorManager;
+    private OrientacionListener listener;
     private Sensor acelerometro;
     private Sensor magnetometro;
     private float[] valoresAcelerometro = new float[3];
@@ -22,13 +25,14 @@ public class Brujula implements SensorEventListener {
     private float correccionAzimuth = 0;
 
     public ImageView flechas = null;
-    public ImageView flechaOrientacion = null;
+    public ImageView imagenBrujula = null;
 
-    public Brujula(Context context) {
+    public Brujula(Context context, OrientacionListener listener) {
         sensorManager = (SensorManager) context
                 .getSystemService(Context.SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometro = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        this.listener = listener;
     }
 
     public void iniciar() {
@@ -44,7 +48,7 @@ public class Brujula implements SensorEventListener {
 
     private void redibujarFlechas() {
 
-        if (flechas != null && flechaOrientacion != null) {
+        if (flechas != null) {
 
             Animation animacionFlechas = new RotateAnimation(-correccionAzimuth, -azimuth,
                     Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -100,6 +104,7 @@ public class Brujula implements SensorEventListener {
             azimuth = (azimuth + 360) % 360;
 
             redibujarFlechas();
+            listener.rotar((int) azimuth);
         }
     }
 
