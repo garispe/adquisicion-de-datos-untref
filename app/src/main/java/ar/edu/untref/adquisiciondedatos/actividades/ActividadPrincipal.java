@@ -139,8 +139,9 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if (!editDelta.getText().toString().isEmpty()) {
-                    delta = Float.valueOf(editDelta.getText().toString());
+                String deltaIndicado = editDelta.getText().toString();
+                if (!deltaIndicado.isEmpty()) {
+                    delta = Float.valueOf(deltaIndicado);
                 }
 
                 ocultarTeclado();
