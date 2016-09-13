@@ -78,9 +78,6 @@ public class ActividadPlanNavegacion extends AppCompatActivity {
 
                     ocultarTeclado();
                     dialog.dismiss();
-
-                } else {
-
                 }
             }
 
