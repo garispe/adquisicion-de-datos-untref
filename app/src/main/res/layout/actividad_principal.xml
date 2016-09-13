@@ -44,110 +44,120 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_indicador_angulos"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:padding="16dp">
+        android:fillViewport="true">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_indicador_angulos"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:id="@+id/layout_indicador_angulos"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
-                <ImageView
-                    android:id="@+id/icono_brujula"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_indicador_angulos"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="18dp"
-                    android:src="@drawable/ic_brujula_norte" />
+                    android:background="@android:color/white"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
-                <EditText
-                    android:id="@+id/angulos_respecto_norte"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toLeftOf="@id/icono_brujula"
-                    android:hint="@string/mensaje_angulos_respecto_norte"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColorHint="@color/grisClaro" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/icono_brujula"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="18dp"
+                            android:src="@drawable/ic_brujula_norte" />
+
+                        <EditText
+                            android:id="@+id/angulos_respecto_norte"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_toLeftOf="@id/icono_brujula"
+                            android:hint="@string/mensaje_angulos_respecto_norte"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColorHint="@color/grisClaro" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
 
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+            <RelativeLayout
+                android:id="@+id/layout_brujula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_indicador_angulos"
+                android:layout_centerHorizontal="true"
+                android:padding="16dp">
 
-    </RelativeLayout>
+                <ImageView
+                    android:id="@+id/imagen_brujula"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/brujula" />
 
-    <RelativeLayout
-        android:id="@+id/layout_brujula"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layout_indicador_angulos"
-        android:layout_centerHorizontal="true"
-        android:padding="16dp">
+                <ImageView
+                    android:id="@+id/imagen_flecha"
+                    android:layout_width="20dp"
+                    android:layout_height="300dp"
+                    android:layout_alignBottom="@+id/imagen_brujula"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/flechas_norte_sur" />
 
-        <ImageView
-            android:id="@+id/imagen_brujula"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/brujula" />
+            </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/imagen_flecha"
-            android:layout_width="20dp"
-            android:layout_height="300dp"
-            android:layout_alignBottom="@+id/imagen_brujula"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/flechas_norte_sur" />
+            <LinearLayout
+                android:id="@+id/layout_indicaciones"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/layout_brujula"
+                android:background="@color/blanco"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="16dp">
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/texto_indicacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    tools:text="360º" />
 
-    <LinearLayout
-        android:id="@+id/layout_indicaciones"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/layout_brujula"
-        android:background="@color/blanco"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="16dp">
+                <ImageView
+                    android:id="@+id/imagen_indicacion"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:scaleX="1"
+                    android:src="@drawable/img_rotacion"
+                    android:tint="@color/colorAccent" />
 
-        <TextView
-            android:id="@+id/texto_indicacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="24sp"
-            tools:text="360º" />
-
-        <ImageView
-            android:id="@+id/imagen_indicacion"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:scaleX="1"
-            android:src="@drawable/img_rotacion"
-            android:tint="@color/colorAccent" />
-
-    </LinearLayout>
-
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

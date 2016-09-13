@@ -1,9 +1,12 @@
 package ar.edu.untref.adquisiciondedatos.actividades;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -120,13 +123,46 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     }
 
     @OnClick(R.id.delta)
-    public void configurarDelta(){
+    public void configurarDelta() {
 
-        // TODO: Mostrar dialogo
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Configurar delta");
+
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.dialogo_configurar_delta, null);
+        dialog.setView(view);
+
+        final EditText editDelta = (EditText) view.findViewById(R.id.delta);
+
+        dialog.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (!editDelta.getText().toString().isEmpty()) {
+                    delta = Float.valueOf(editDelta.getText().toString());
+                }
+
+                ocultarTeclado();
+                dialog.dismiss();
+            }
+
+        })
+                .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ocultarTeclado();
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void ocultarTeclado() {
+        // TODO: ocultar teclado
     }
 
     @OnClick(R.id.nuevo_plan_navegacion)
-    public void crearNuevoPlanNavegacion(){
+    public void crearNuevoPlanNavegacion() {
 
         Intent intent = new Intent(this, ActividadPlanNavegacion.class);
         startActivityForResult(intent, REQUEST_CODE_NUEVO_PLAN_NAVEGACION);

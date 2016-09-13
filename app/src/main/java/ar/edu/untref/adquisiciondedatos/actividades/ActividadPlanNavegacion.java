@@ -37,12 +37,12 @@ public class ActividadPlanNavegacion extends AppCompatActivity {
     }
 
     @OnClick(R.id.fab_nueva_indicacion)
-    private void agregarIndicacion(Indicacion indicacion) {
+    public void agregarIndicacion() {
 
         // TODO: Dialogo para agregar indicacion
 
-        indicaciones.add(indicacion);
-        indicacionesAdapter.setIndicaciones(indicaciones);
+//        indicaciones.add(indicacion);
+//        indicacionesAdapter.setIndicaciones(indicaciones);
     }
 
     @OnClick(R.id.comenzar)
