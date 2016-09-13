@@ -52,6 +52,8 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         setContentView(R.layout.actividad_principal);
         ButterKnife.bind(this);
 
+        ocultarTeclado();
+
         brujula = new Brujula(this, this);
         brujula.flechas = (ImageView) findViewById(R.id.imagen_flecha);
         brujula.imagenBrujula = (ImageView) findViewById(R.id.imagen_brujula);
