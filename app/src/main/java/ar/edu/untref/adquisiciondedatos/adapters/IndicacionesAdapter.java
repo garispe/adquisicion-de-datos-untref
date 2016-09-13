@@ -30,8 +30,8 @@ public class IndicacionesAdapter extends RecyclerView.Adapter<IndicacionesAdapte
 
         Indicacion indicacion = indicaciones.get(position);
 
-        holder.angulos.setText(String.valueOf(indicacion.getAngulos()));
-        holder.segundos.setText(String.valueOf(indicacion.getSegundos()));
+        holder.angulos.setText(String.format("Angulos: %sº", String.valueOf(indicacion.getAngulos())));
+        holder.segundos.setText(String.format("Segundos: %s''", String.valueOf(indicacion.getSegundos())));
     }
 
     @Override
