@@ -15,6 +15,7 @@ import ar.edu.untref.adquisiciondedatos.modelos.Indicacion;
 import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ActividadPlanNavegacion extends AppCompatActivity {
 
@@ -35,11 +36,16 @@ public class ActividadPlanNavegacion extends AppCompatActivity {
         recyclerView.setAdapter(indicacionesAdapter);
     }
 
+    @OnClick(R.id.fab_nueva_indicacion)
     private void agregarIndicacion(Indicacion indicacion) {
+
+        // TODO: Dialogo para agregar indicacion
+
         indicaciones.add(indicacion);
         indicacionesAdapter.setIndicaciones(indicaciones);
     }
 
+    @OnClick(R.id.comenzar)
     public void comenzarPlanNavegacion(){
 
         Intent intent = new Intent();
