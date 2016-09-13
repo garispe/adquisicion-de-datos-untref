@@ -7,9 +7,48 @@
     tools:context="ar.edu.untref.adquisiciondedatos.actividades.ActividadPrincipal">
 
     <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="Adquisición de Datos"
+            android:textColor="@color/blanco"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/nuevo_plan_navegacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_navigation_white_24dp"
+            android:tint="@color/blanco" />
+
+        <ImageView
+            android:id="@+id/delta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@id/nuevo_plan_navegacion"
+            android:src="@drawable/ic_delta"
+            android:tint="@color/blanco" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/layout_indicador_angulos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
         android:padding="16dp">
 
         <android.support.v7.widget.CardView
@@ -74,39 +113,41 @@
         <ImageView
             android:id="@+id/imagen_flecha"
             android:layout_width="20dp"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/flechas" />
+            android:layout_height="300dp"
+            android:layout_alignBottom="@+id/imagen_brujula"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/flechas_norte_sur" />
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layout_indicaciones"
         android:layout_width="match_parent"
-        android:background="@color/blanco"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/layout_brujula"
+        android:background="@color/blanco"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <TextView
             android:id="@+id/texto_indicacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:gravity="center"
             android:textSize="24sp"
-            tools:text="Debes rotar: 360º" />
+            tools:text="360º" />
 
         <ImageView
             android:id="@+id/imagen_indicacion"
-            android:layout_width="100dp"
-            android:layout_height="200dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/flecha_orientacion"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:scaleX="1"
+            android:src="@drawable/img_rotacion"
             android:tint="@color/colorAccent" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

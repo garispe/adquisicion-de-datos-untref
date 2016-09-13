@@ -5,7 +5,6 @@ package ar.edu.untref.adquisiciondedatos.utilidades;
  */
 public class Constantes {
 
-    public static final String LATITUD = "longitud";
-    public static final String LONGITUD = "latitud";
-    public double DELTA_DESVIACION = 5;
+    public static final int RESULT_CODE_PLAN_NAVEGACION = 1;
+    public static final String INDICACIONES = "indicaciones";
 }

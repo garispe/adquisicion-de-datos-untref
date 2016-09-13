@@ -1,24 +1,35 @@
 package ar.edu.untref.adquisiciondedatos.actividades;
 
-import android.location.Location;
-import android.location.LocationListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import ar.edu.untref.adquisiciondedatos.R;
 import ar.edu.untref.adquisiciondedatos.interfaces.OrientacionListener;
 import ar.edu.untref.adquisiciondedatos.modelos.Brujula;
+import ar.edu.untref.adquisiciondedatos.modelos.Indicacion;
+import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ActividadPrincipal extends AppCompatActivity implements OrientacionListener {
 
-    private static final String TAG = ActividadPrincipal.class.getSimpleName();
+    private static final int ROTACION_DER = 1;
+    private static final int ROTACION_IZQ = -1;
+    private static final int REQUEST_CODE_NUEVO_PLAN_NAVEGACION = 1;
+
+    @Bind(R.id.layout_indicador_angulos)
+    RelativeLayout layoutIndicadorAngulos;
     @Bind(R.id.angulos_respecto_norte)
     EditText angulosRespectoNorte;
     @Bind(R.id.texto_indicacion)
@@ -26,7 +37,9 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     @Bind(R.id.imagen_indicacion)
     ImageView imagenIndicacion;
 
+    private ArrayList<Indicacion> indicaciones = new ArrayList<>();
     private float angulosIndicados = 0;
+    private float delta = 0;
     private Brujula brujula;
 
     @Override
@@ -87,12 +100,35 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         int diferencia = (int) (angulosIndicados - angulos);
 
         if (diferencia < 0) {
-            imagenIndicacion.setRotation(180);
+            imagenIndicacion.setScaleX(ROTACION_IZQ);
         } else {
-            imagenIndicacion.setRotation(0);
+            imagenIndicacion.setScaleX(ROTACION_DER);
         }
 
         diferencia = Math.abs(diferencia);
-        textoIndicacion.setText(String.valueOf(diferencia));
+        textoIndicacion.setText(String.format("%sº", String.valueOf(diferencia)));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Constantes.RESULT_CODE_PLAN_NAVEGACION) {
+            indicaciones = (ArrayList<Indicacion>) data.getSerializableExtra(Constantes.INDICACIONES);
+            layoutIndicadorAngulos.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.delta)
+    public void configurarDelta(){
+
+        // TODO: Mostrar dialogo
+    }
+
+    @OnClick(R.id.nuevo_plan_navegacion)
+    public void crearNuevoPlanNavegacion(){
+
+        Intent intent = new Intent(this, ActividadPlanNavegacion.class);
+        startActivityForResult(intent, REQUEST_CODE_NUEVO_PLAN_NAVEGACION);
     }
 }
