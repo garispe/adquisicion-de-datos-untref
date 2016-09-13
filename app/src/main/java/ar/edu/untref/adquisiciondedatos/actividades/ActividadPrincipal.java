@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -158,7 +159,7 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     }
 
     private void ocultarTeclado() {
-        // TODO: ocultar teclado
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @OnClick(R.id.nuevo_plan_navegacion)
