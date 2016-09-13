@@ -115,16 +115,6 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         textoIndicacion.setText(String.format("%sº", String.valueOf(diferencia)));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Constantes.RESULT_CODE_PLAN_NAVEGACION) {
-            indicaciones = (ArrayList<Indicacion>) data.getSerializableExtra(Constantes.INDICACIONES);
-            layoutIndicadorAngulos.setVisibility(View.GONE);
-        }
-    }
-
     @OnClick(R.id.delta)
     public void configurarDelta() {
 
@@ -170,5 +160,14 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
 
         Intent intent = new Intent(this, ActividadPlanNavegacion.class);
         startActivityForResult(intent, REQUEST_CODE_NUEVO_PLAN_NAVEGACION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Constantes.RESULT_CODE_PLAN_NAVEGACION) {
+            indicaciones = (ArrayList<Indicacion>) data.getExtras().get(Constantes.INDICACIONES);
+        }
     }
 }

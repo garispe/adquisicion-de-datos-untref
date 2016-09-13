@@ -3,4 +3,5 @@
     <string name="mensaje_angulos_respecto_norte">Desviación respecto del norte</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="agregar">Agregar</string>
 </resources>

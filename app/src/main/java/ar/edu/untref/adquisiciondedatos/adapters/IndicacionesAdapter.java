@@ -39,8 +39,8 @@ public class IndicacionesAdapter extends RecyclerView.Adapter<IndicacionesAdapte
         return indicaciones.size();
     }
 
-    public void setIndicaciones(List<Indicacion> indicaciones) {
-        this.indicaciones = indicaciones;
+    public void agregarIndicacion(Indicacion indicacion) {
+        this.indicaciones.add(indicacion);
         notifyDataSetChanged();
     }
 

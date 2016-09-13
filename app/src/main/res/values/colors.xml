@@ -6,4 +6,5 @@
     <color name="grisClaro">#cecece</color>
     <color name="blanco">#ffffff</color>
     <color name="fondo_principal">#2e2e2e</color>
+    <color name="negro">#000000</color>
 </resources>
