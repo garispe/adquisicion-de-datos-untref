@@ -1,21 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/blanco"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/angulos"
+        android:id="@+id/posicion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Angulos: 30º" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:textColor="@color/negro"
+        android:textSize="18sp"
+        tools:text="1" />
 
-    <TextView
-        android:id="@+id/segundos"
+    <ImageView
+        android:id="@+id/imagen_indicacion"
         android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/posicion"
         android:layout_height="wrap_content"
-        android:layout_below="@id/angulos"
-        tools:text="Segundos: 10''" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/ic_history_black_36dp" />
+
+    <RelativeLayout
+        android:id="@+id/layout_indicaciones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/imagen_indicacion">
+
+        <TextView
+            android:id="@+id/angulos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/negro"
+            android:textSize="18sp"
+            tools:text="Angulos: 30º" />
+
+        <TextView
+            android:id="@+id/segundos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/angulos"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/negro"
+            android:textSize="18sp"
+            tools:text="Segundos: 10''" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/layout_indicaciones"
+        android:layout_marginTop="24dp"
+        android:background="@color/grisClaro" />
 
 </RelativeLayout>

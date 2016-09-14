@@ -38,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:padding="16dp"
         tools:listitem="@layout/item_indicacion" />
 
     <android.support.design.widget.FloatingActionButton

@@ -1,9 +1,11 @@
 package ar.edu.untref.adquisiciondedatos.adapters;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,8 +32,13 @@ public class IndicacionesAdapter extends RecyclerView.Adapter<IndicacionesAdapte
 
         Indicacion indicacion = indicaciones.get(position);
 
+        holder.posicion.setText(String.valueOf(position + 1));
         holder.angulos.setText(String.format("Angulos: %sº", String.valueOf(indicacion.getAngulos())));
         holder.segundos.setText(String.format("Segundos: %s''", String.valueOf(indicacion.getSegundos())));
+
+        if(position % 2 == 0){
+            holder.item.setBackgroundColor(ContextCompat.getColor(holder.item.getContext(), R.color.grisClaro));
+        }
     }
 
     @Override
@@ -46,12 +53,16 @@ public class IndicacionesAdapter extends RecyclerView.Adapter<IndicacionesAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        RelativeLayout item;
+        TextView posicion;
         TextView angulos;
         TextView segundos;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            item = (RelativeLayout) itemView.findViewById(R.id.item);
+            posicion = (TextView) itemView.findViewById(R.id.posicion);
             angulos = (TextView) itemView.findViewById(R.id.angulos);
             segundos = (TextView) itemView.findViewById(R.id.segundos);
         }
