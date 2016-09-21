@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ar.edu.untref.adquisiciondedatos.R;
+import ar.edu.untref.adquisiciondedatos.controladores.ControladorBluetooth;
 import ar.edu.untref.adquisiciondedatos.interfaces.OrientacionListener;
 import ar.edu.untref.adquisiciondedatos.modelos.Brujula;
 import ar.edu.untref.adquisiciondedatos.modelos.Indicacion;
@@ -38,6 +39,8 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     EditText angulosRespectoNorte;
     @Bind(R.id.texto_indicacion)
     TextView textoIndicacion;
+    @Bind(R.id.texto_delta)
+    TextView textoDelta;
     @Bind(R.id.imagen_indicacion)
     ImageView imagenIndicacion;
 
@@ -45,6 +48,7 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     private float angulosIndicados = 0;
     private float delta = 0;
     private Brujula brujula;
+    private ControladorBluetooth bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,9 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         brujula.flechas = (ImageView) findViewById(R.id.imagen_flecha);
         brujula.imagenBrujula = (ImageView) findViewById(R.id.imagen_brujula);
         brujula.iniciar();
+
+//        bluetooth = ControladorBluetooth.getInstance();
+//        bluetooth.conectar();
 
         angulosRespectoNorte.setOnEditorActionListener(editorActionListener);
     }
@@ -80,6 +87,7 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         brujula.detener();
     }
 
+    // TODO: Refactoriza @Martin usando Butterknife
     private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int action, KeyEvent event) {
@@ -105,10 +113,18 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
 
         int diferencia = (int) (angulosIndicados - angulos);
 
-        if (diferencia < 0) {
-            imagenIndicacion.setScaleX(ROTACION_IZQ);
+        if (Math.abs(diferencia) < delta) {
+            imagenIndicacion.setVisibility(View.INVISIBLE);
         } else {
-            imagenIndicacion.setScaleX(ROTACION_DER);
+            imagenIndicacion.setVisibility(View.VISIBLE);
+            // Si la diferencia es menor a 0, la flecha roja está a la izquierda del 0.
+            // ROTACION_IZQ: Indica que el móvil debe rotar a la izquierda
+            // ROTACION_DER: Indica que el móvil debe rotar a la derecha
+            if (diferencia + delta <= 0) {
+                imagenIndicacion.setScaleX(ROTACION_IZQ);
+            } else {
+                imagenIndicacion.setScaleX(ROTACION_DER);
+            }
         }
 
         diferencia = Math.abs(diferencia);
@@ -134,6 +150,7 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
                 String deltaIndicado = editDelta.getText().toString();
                 if (!deltaIndicado.isEmpty()) {
                     delta = Float.valueOf(deltaIndicado);
+                    textoDelta.setText(deltaIndicado);
                 }
 
                 ocultarTeclado();
