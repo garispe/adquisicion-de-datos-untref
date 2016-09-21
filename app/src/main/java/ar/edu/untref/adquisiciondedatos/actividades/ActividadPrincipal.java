@@ -3,6 +3,7 @@ package ar.edu.untref.adquisiciondedatos.actividades;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -19,16 +20,18 @@ import java.util.ArrayList;
 
 import ar.edu.untref.adquisiciondedatos.R;
 import ar.edu.untref.adquisiciondedatos.controladores.ControladorBluetooth;
+import ar.edu.untref.adquisiciondedatos.interfaces.NavegacionListener;
 import ar.edu.untref.adquisiciondedatos.interfaces.OrientacionListener;
-import ar.edu.untref.adquisiciondedatos.modelos.Brujula;
+import ar.edu.untref.adquisiciondedatos.utilidades.Brujula;
 import ar.edu.untref.adquisiciondedatos.modelos.Indicacion;
 import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
+import ar.edu.untref.adquisiciondedatos.utilidades.Temporizador;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 
-public class ActividadPrincipal extends AppCompatActivity implements OrientacionListener {
+public class ActividadPrincipal extends AppCompatActivity implements OrientacionListener, NavegacionListener {
 
     private static final int ROTACION_DER = 1;
     private static final int ROTACION_IZQ = -1;
@@ -50,6 +53,8 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     private float delta = 0;
     private Brujula brujula;
     private ControladorBluetooth bluetooth;
+    private Temporizador temporizador;
+    private int indiceIndicacion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +191,27 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
 
         if (resultCode == Constantes.RESULT_CODE_PLAN_NAVEGACION) {
             indicaciones = (ArrayList<Indicacion>) data.getExtras().get(Constantes.INDICACIONES);
+
+            comenzarNavegacion();
+        }
+    }
+
+    private void comenzarNavegacion() {
+
+        Indicacion primeraIndicacion = indicaciones.get(indiceIndicacion);
+        temporizador = new Temporizador(primeraIndicacion, this);
+        temporizador.comenzar();
+    }
+
+    @Override
+    public void setNuevaIndicacion() {
+
+        indiceIndicacion++;
+
+        if (indiceIndicacion < indicaciones.size()) {
+            Indicacion indicacion = indicaciones.get(indiceIndicacion);
+            temporizador = new Temporizador(indicacion, this);
+            temporizador.comenzar();
         }
     }
 }

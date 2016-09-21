@@ -1,4 +1,4 @@
-package ar.edu.untref.adquisiciondedatos.modelos;
+package ar.edu.untref.adquisiciondedatos.utilidades;
 
 import android.content.Context;
 import android.hardware.Sensor;
