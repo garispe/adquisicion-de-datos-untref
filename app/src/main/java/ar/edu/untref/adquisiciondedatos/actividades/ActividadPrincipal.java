@@ -64,7 +64,7 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         brujula.imagenBrujula = (ImageView) findViewById(R.id.imagen_brujula);
         brujula.iniciar();
 
-//        bluetooth = ControladorBluetooth.getInstance();
+        bluetooth = ControladorBluetooth.getInstance();
 //        bluetooth.conectar();
     }
 
@@ -72,18 +72,24 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     protected void onResume() {
         super.onResume();
         brujula.iniciar();
+
+//        if(!bluetooth.estaConectado()){
+//            bluetooth.conectar();
+//        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         brujula.detener();
+        bluetooth.desconectar();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         brujula.detener();
+        bluetooth.desconectar();
     }
 
     @OnEditorAction(R.id.angulos_respecto_norte)

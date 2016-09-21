@@ -116,6 +116,7 @@ public class ControladorBluetooth {
                 this.socket.close();
             }
             this.bluetoothAdapter.disable();
+            this.estaConectado = false;
 
         } catch (IOException e) {
             e.printStackTrace();
