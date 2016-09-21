@@ -26,6 +26,7 @@ import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
 
 public class ActividadPrincipal extends AppCompatActivity implements OrientacionListener {
 
@@ -65,8 +66,6 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
 
 //        bluetooth = ControladorBluetooth.getInstance();
 //        bluetooth.conectar();
-
-        angulosRespectoNorte.setOnEditorActionListener(editorActionListener);
     }
 
     @Override
@@ -87,26 +86,22 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         brujula.detener();
     }
 
-    // TODO: Refactoriza @Martin usando Butterknife
-    private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int action, KeyEvent event) {
+    @OnEditorAction(R.id.angulos_respecto_norte)
+    public boolean indicarAngulosRespectoNorte(TextView v, int action, KeyEvent event) {
 
-            if (action == EditorInfo.IME_ACTION_DONE) {
+        if (action == EditorInfo.IME_ACTION_DONE) {
 
-                String angulos = angulosRespectoNorte.getText().toString();
+            String angulos = angulosRespectoNorte.getText().toString();
 
-                if (!angulos.isEmpty()) {
-                    angulosIndicados = Float.parseFloat(angulos);
-                    angulosRespectoNorte.setText("");
+            if (!angulos.isEmpty()) {
+                angulosIndicados = Float.parseFloat(angulos);
+                angulosRespectoNorte.setText("");
 
-                    brujula.imagenBrujula.setRotation(-angulosIndicados);
-                }
+                brujula.imagenBrujula.setRotation(-angulosIndicados);
             }
-
-            return false;
         }
-    };
+        return false;
+    }
 
     @Override
     public void rotar(int angulos) {
