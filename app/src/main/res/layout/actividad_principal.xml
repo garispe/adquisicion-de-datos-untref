@@ -90,6 +90,36 @@
                             android:layout_marginRight="18dp"
                             android:src="@drawable/ic_brujula_norte" />
 
+                        <LinearLayout
+                            android:id="@+id/layout_indicador_angulos_tiempo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_toLeftOf="@id/icono_brujula"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tAngulos_indicados"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="50"
+                                android:gravity="center"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/tSegundos_indicados"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="50"
+                                android:gravity="center"
+                                android:textSize="20sp" />
+
+                        </LinearLayout>
+
                         <EditText
                             android:id="@+id/angulos_respecto_norte"
                             android:layout_width="wrap_content"
@@ -105,7 +135,8 @@
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLines="1"
-                            android:textColorHint="@color/grisClaro" />
+                            android:textColorHint="@color/grisClaro"
+                            android:visibility="visible" />
 
                     </RelativeLayout>
 

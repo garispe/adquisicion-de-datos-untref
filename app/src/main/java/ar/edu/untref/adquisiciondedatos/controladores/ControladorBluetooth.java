@@ -20,7 +20,6 @@ public class ControladorBluetooth {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothSocket socket;
     private OutputStream outputStream;
-    private InputStream inputStream;
 
     private boolean estaConectado = false;
 
@@ -45,9 +44,9 @@ public class ControladorBluetooth {
         return this.bluetoothAdapter;
     }
 
-    public void habilitarBluetooth(){
+    public void habilitarBluetooth() {
 
-        if(!bluetoothAdapter.isEnabled()) {
+        if (!bluetoothAdapter.isEnabled()) {
             bluetoothAdapter.enable();
         }
     }
@@ -72,7 +71,6 @@ public class ControladorBluetooth {
                     estaConectado = true;
 
                     outputStream = socket.getOutputStream();
-                    inputStream = socket.getInputStream();
 
                     Log.i(TAG, "Conexion establecida");
 
@@ -130,23 +128,5 @@ public class ControladorBluetooth {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String leerDato() throws IOException {
-
-        String datoLeido = "No se leyó ningún dato";
-
-        byte[] respuesta = new byte[5];
-
-        for (int i = 0; i < 5; i++) {
-
-            byte[] bytes = new byte[1];
-            inputStream.read(bytes);
-            respuesta[i] = bytes[0];
-        }
-
-        datoLeido = new String(respuesta);
-
-        return datoLeido;
     }
 }

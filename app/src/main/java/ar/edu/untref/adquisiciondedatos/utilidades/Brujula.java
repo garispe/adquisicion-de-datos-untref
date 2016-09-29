@@ -37,9 +37,9 @@ public class Brujula implements SensorEventListener {
 
     public void iniciar() {
         sensorManager.registerListener(this, acelerometro,
-                SensorManager.SENSOR_DELAY_GAME);
+                SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(this, magnetometro,
-                SensorManager.SENSOR_DELAY_GAME);
+                SensorManager.SENSOR_DELAY_UI);
     }
 
     public void detener() {
