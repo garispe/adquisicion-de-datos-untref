@@ -29,6 +29,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
+            android:padding="12dp"
             android:src="@drawable/ic_navigation_white_24dp"
             android:tint="@color/blanco" />
 
@@ -39,6 +40,9 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/nuevo_plan_navegacion"
+            android:paddingBottom="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="12dp"
             android:src="@drawable/ic_delta"
             android:tint="@color/blanco" />
 

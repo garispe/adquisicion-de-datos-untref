@@ -20,6 +20,7 @@ public class Temporizador extends CountDownTimer {
     private Indicacion indicacion;
     private int tiempoGuardado = 0;
     private int segundosIndicados = 0;
+    private boolean estaDetenido = false;
 
     public Temporizador(Indicacion indicacion, NavegacionListener navegacionListener, TiempoListener tiempoListener) {
         super(indicacion.getSegundos() * Constantes.SEGUNDO_EN_MILISEGUNDOS, Constantes.SEGUNDO_EN_MILISEGUNDOS);
@@ -31,10 +32,12 @@ public class Temporizador extends CountDownTimer {
     }
 
     public void comenzar() {
+        estaDetenido = false;
         start();
     }
 
     public void detener() {
+        estaDetenido = true;
         cancel();
     }
 
@@ -69,5 +72,9 @@ public class Temporizador extends CountDownTimer {
 
     public void setTiempoGuardado(int tiempoGuardado) {
         this.tiempoGuardado = tiempoGuardado;
+    }
+
+    public boolean estaDetenido() {
+        return estaDetenido;
     }
 }

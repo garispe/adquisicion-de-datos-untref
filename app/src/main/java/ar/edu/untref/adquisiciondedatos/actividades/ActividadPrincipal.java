@@ -159,7 +159,9 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
             }
         }
 
-        detectarCambioCurso();
+        if (temporizador != null) {
+            detectarCambioCurso();
+        }
 
         diferencia = Math.abs(diferencia);
 //        bluetooth.enviarDato(String.valueOf(diferencia));
@@ -176,30 +178,35 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
                 vectorCompleto = true;
                 posicionVector = 0;
             }
+
         } else {
 
             if (vectorCurso[0] == false && vectorCurso[1] == true) {
 
-                if (temporizador != null) {
+                int tiempoGuardado = temporizador.getTiempoGuardado();
+                Indicacion indicacionActual = temporizador.getIndicacion();
+                indicacionActual.setSegundos(tiempoGuardado);
 
-                    int tiempoGuardado = temporizador.getTiempoGuardado();
-                    Indicacion indicacionActual = temporizador.getIndicacion();
-                    indicacionActual.setSegundos(tiempoGuardado);
+                temporizador.detener();
 
-                    temporizador.detener();
-
-                    temporizador = new Temporizador(indicacionActual, this, this);
-                    temporizador.comenzar();
-                }
-
+                temporizador = new Temporizador(indicacionActual, this, this);
+                temporizador.comenzar();
 
             } else if ((vectorCurso[0] == true && vectorCurso[1] == false)
                     || (vectorCurso[0] == false && vectorCurso[1] == false)) {
 
-                if (temporizador != null) {
-                    temporizador.detener();
-                }
+                temporizador.detener();
+
+            } else if((vectorCurso[0] == true && vectorCurso[1] == true) && temporizador.estaDetenido()){
+
+                int tiempoGuardado = temporizador.getTiempoGuardado();
+                Indicacion indicacionActual = temporizador.getIndicacion();
+                indicacionActual.setSegundos(tiempoGuardado);
+
+                temporizador = new Temporizador(indicacionActual, this, this);
+                temporizador.comenzar();
             }
+
             vectorCompleto = false;
         }
     }
@@ -298,6 +305,9 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         } else {
 
             indiceIndicacion = 0;
+            indicaciones.clear();
+            brujula.imagenBrujula.setRotation(0);
+            angulosIndicados = 0;
             angulosRespectoNorte.setVisibility(VISIBLE);
             layoutIndicadorAngulosTiempo.setVisibility(GONE);
         }

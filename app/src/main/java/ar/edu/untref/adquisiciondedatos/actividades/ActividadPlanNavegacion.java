@@ -3,6 +3,7 @@ package ar.edu.untref.adquisiciondedatos.actividades;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -95,10 +96,14 @@ public class ActividadPlanNavegacion extends AppCompatActivity {
     @OnClick(R.id.comenzar)
     public void comenzarPlanNavegacion() {
 
-        Intent intent = new Intent();
-        intent.putExtra(Constantes.INDICACIONES, indicaciones);
-        setResult(Constantes.RESULT_CODE_PLAN_NAVEGACION, intent);
-        finish();
+        if (!indicaciones.isEmpty()) {
+            Intent intent = new Intent();
+            intent.putExtra(Constantes.INDICACIONES, indicaciones);
+            setResult(Constantes.RESULT_CODE_PLAN_NAVEGACION, intent);
+            finish();
+        } else {
+            Snackbar.make(recyclerView, "No hay indicaciones", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void ocultarTeclado() {
