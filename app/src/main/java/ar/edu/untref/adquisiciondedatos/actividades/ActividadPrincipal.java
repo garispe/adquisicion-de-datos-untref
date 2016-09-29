@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ import ar.edu.untref.adquisiciondedatos.R;
 import ar.edu.untref.adquisiciondedatos.controladores.ControladorBluetooth;
 import ar.edu.untref.adquisiciondedatos.interfaces.NavegacionListener;
 import ar.edu.untref.adquisiciondedatos.interfaces.OrientacionListener;
+import ar.edu.untref.adquisiciondedatos.interfaces.TiempoListener;
 import ar.edu.untref.adquisiciondedatos.utilidades.Brujula;
 import ar.edu.untref.adquisiciondedatos.modelos.Indicacion;
 import ar.edu.untref.adquisiciondedatos.utilidades.Constantes;
@@ -31,7 +34,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 
-public class ActividadPrincipal extends AppCompatActivity implements OrientacionListener, NavegacionListener {
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+public class ActividadPrincipal extends AppCompatActivity implements OrientacionListener, NavegacionListener, TiempoListener {
 
     private static final int ROTACION_DER = 1;
     private static final int ROTACION_IZQ = -1;
@@ -47,14 +53,25 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
     TextView textoDelta;
     @Bind(R.id.imagen_indicacion)
     ImageView imagenIndicacion;
+    @Bind(R.id.layout_indicador_angulos_tiempo)
+    LinearLayout layoutIndicadorAngulosTiempo;
+    @Bind(R.id.tAngulos_indicados)
+    TextView tAngulosIndicacion;
+    @Bind(R.id.tSegundos_indicados)
+    TextView tSegundosIndicacion;
 
     private ArrayList<Indicacion> indicaciones = new ArrayList<>();
     private float angulosIndicados = 0;
-    private float delta = 0;
+    private float delta = Constantes.DELTA_POR_DEFECTO;
     private Brujula brujula;
     private ControladorBluetooth bluetooth;
     private Temporizador temporizador;
     private int indiceIndicacion = 0;
+
+    private boolean vectorCompleto = false;
+    private boolean enCurso = false;
+    private Boolean vectorCurso[] = new Boolean[2];
+    private int posicionVector = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +80,8 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         ButterKnife.bind(this);
 
         ocultarTeclado();
+
+        textoDelta.setText(String.valueOf((int) delta));
 
         brujula = new Brujula(this, this);
         brujula.flechas = (ImageView) findViewById(R.id.imagen_flecha);
@@ -120,12 +139,19 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         int diferencia = (int) (angulosIndicados - angulos);
 
         if (Math.abs(diferencia) < delta) {
-            imagenIndicacion.setVisibility(View.INVISIBLE);
+
+            imagenIndicacion.setImageResource(R.drawable.orientacion_ok);
+            enCurso = true;
+
         } else {
-            imagenIndicacion.setVisibility(View.VISIBLE);
+
+            imagenIndicacion.setImageResource(R.drawable.img_rotacion);
+            enCurso = false;
+
             // Si la diferencia es menor a 0, la flecha roja está a la izquierda del 0.
             // ROTACION_IZQ: Indica que el móvil debe rotar a la izquierda
             // ROTACION_DER: Indica que el móvil debe rotar a la derecha
+
             if (diferencia + delta <= 0) {
                 imagenIndicacion.setScaleX(ROTACION_IZQ);
             } else {
@@ -133,8 +159,49 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
             }
         }
 
+        detectarCambioCurso();
+
         diferencia = Math.abs(diferencia);
+//        bluetooth.enviarDato(String.valueOf(diferencia));
         textoIndicacion.setText(String.format("%sº", String.valueOf(diferencia)));
+    }
+
+    private void detectarCambioCurso() {
+
+        if (!vectorCompleto) {
+            vectorCurso[posicionVector] = enCurso;
+            posicionVector++;
+
+            if (posicionVector == 2) {
+                vectorCompleto = true;
+                posicionVector = 0;
+            }
+        } else {
+
+            if (vectorCurso[0] == false && vectorCurso[1] == true) {
+
+                if (temporizador != null) {
+
+                    int tiempoGuardado = temporizador.getTiempoGuardado();
+                    Indicacion indicacionActual = temporizador.getIndicacion();
+                    indicacionActual.setSegundos(tiempoGuardado);
+
+                    temporizador.detener();
+
+                    temporizador = new Temporizador(indicacionActual, this, this);
+                    temporizador.comenzar();
+                }
+
+
+            } else if ((vectorCurso[0] == true && vectorCurso[1] == false)
+                    || (vectorCurso[0] == false && vectorCurso[1] == false)) {
+
+                if (temporizador != null) {
+                    temporizador.detener();
+                }
+            }
+            vectorCompleto = false;
+        }
     }
 
     @OnClick(R.id.delta)
@@ -192,14 +259,24 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         if (resultCode == Constantes.RESULT_CODE_PLAN_NAVEGACION) {
             indicaciones = (ArrayList<Indicacion>) data.getExtras().get(Constantes.INDICACIONES);
 
-            comenzarNavegacion();
+            if (!indicaciones.isEmpty()) {
+                comenzarNavegacion();
+            }
         }
     }
 
     private void comenzarNavegacion() {
 
+        angulosRespectoNorte.setVisibility(GONE);
+        layoutIndicadorAngulosTiempo.setVisibility(VISIBLE);
+
         Indicacion primeraIndicacion = indicaciones.get(indiceIndicacion);
-        temporizador = new Temporizador(primeraIndicacion, this);
+
+        tAngulosIndicacion.setText("Angulos: " + primeraIndicacion.getAngulos() + "º");
+        brujula.imagenBrujula.setRotation(-primeraIndicacion.getAngulos());
+        angulosIndicados = Float.parseFloat(String.valueOf(primeraIndicacion.getAngulos()));
+
+        temporizador = new Temporizador(primeraIndicacion, this, this);
         temporizador.comenzar();
     }
 
@@ -209,9 +286,25 @@ public class ActividadPrincipal extends AppCompatActivity implements Orientacion
         indiceIndicacion++;
 
         if (indiceIndicacion < indicaciones.size()) {
+
             Indicacion indicacion = indicaciones.get(indiceIndicacion);
-            temporizador = new Temporizador(indicacion, this);
+            tAngulosIndicacion.setText("Angulos: " + indicacion.getAngulos() + "º");
+            brujula.imagenBrujula.setRotation(-indicacion.getAngulos());
+            angulosIndicados = Float.parseFloat(String.valueOf(indicacion.getAngulos()));
+
+            temporizador = new Temporizador(indicacion, this, this);
             temporizador.comenzar();
+
+        } else {
+
+            indiceIndicacion = 0;
+            angulosRespectoNorte.setVisibility(VISIBLE);
+            layoutIndicadorAngulosTiempo.setVisibility(GONE);
         }
+    }
+
+    @Override
+    public void contar(int segundos) {
+        tSegundosIndicacion.setText("Segundos: " + segundos + "''");
     }
 }

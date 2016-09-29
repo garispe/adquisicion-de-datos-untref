@@ -4,6 +4,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 
 import ar.edu.untref.adquisiciondedatos.interfaces.NavegacionListener;
+import ar.edu.untref.adquisiciondedatos.interfaces.TiempoListener;
 import ar.edu.untref.adquisiciondedatos.modelos.Indicacion;
 
 /**
@@ -15,27 +16,22 @@ public class Temporizador extends CountDownTimer {
     private static final String TAG = Temporizador.class.getSimpleName();
 
     private NavegacionListener navegacionListener;
+    private TiempoListener tiempoListener;
     private Indicacion indicacion;
+    private int tiempoGuardado = 0;
+    private int segundosIndicados = 0;
 
-    public Temporizador(Indicacion indicacion, NavegacionListener navegacionListener) {
+    public Temporizador(Indicacion indicacion, NavegacionListener navegacionListener, TiempoListener tiempoListener) {
         super(indicacion.getSegundos() * Constantes.SEGUNDO_EN_MILISEGUNDOS, Constantes.SEGUNDO_EN_MILISEGUNDOS);
 
         this.indicacion = indicacion;
+        this.tiempoListener = tiempoListener;
         this.navegacionListener = navegacionListener;
+        this.segundosIndicados = indicacion.getSegundos();
     }
 
     public void comenzar() {
         start();
-    }
-
-    public void reanudar() {
-        comenzar();
-        // Desde tiempo guardado
-    }
-
-    public void pausar() {
-        detener();
-        // Guardar tiempo
     }
 
     public void detener() {
@@ -45,17 +41,33 @@ public class Temporizador extends CountDownTimer {
     @Override
     public void onTick(long milisegundosRestantes) {
 
-        int segundosIndicados = indicacion.getSegundos();
         int segundosRestantes = (int) (milisegundosRestantes / 1000);
 
-        Log.i(TAG, "onTick: Segundos transcurridos: " + (segundosIndicados - segundosRestantes));
+        tiempoGuardado = segundosRestantes;
+        tiempoListener.contar(segundosRestantes);
+
+        Log.w(TAG, "onTick: Segundos transcurridos: " + (segundosIndicados - segundosRestantes));
     }
 
     @Override
     public void onFinish() {
         detener();
-        Log.i(TAG, "Indicacion completada");
-
         navegacionListener.setNuevaIndicacion();
+    }
+
+    public Indicacion getIndicacion() {
+        return indicacion;
+    }
+
+    public void setIndicacion(Indicacion indicacion) {
+        this.indicacion = indicacion;
+    }
+
+    public int getTiempoGuardado() {
+        return tiempoGuardado;
+    }
+
+    public void setTiempoGuardado(int tiempoGuardado) {
+        this.tiempoGuardado = tiempoGuardado;
     }
 }
